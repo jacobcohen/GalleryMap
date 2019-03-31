@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import './App.css';
-import { useGoogleMap, useMap } from "./Hooks";
+import '../Styles/App.css';
+import { useGoogleMap, useMap } from "../Helpers/Hooks";
 const API_KEY = 'AIzaSyCzz9QPwU12Z9GG_c8UQ_WRA7zLeh40QWQ';
 
 const initialConfig = {
@@ -17,10 +17,10 @@ export default function App() {
       <div
         style={{
           height: "100vh",
-          width: "100%"
+          width: "60%",
+          float: "right"
         }}
-    ref={mapContainerRef}
-  />
+        ref={mapContainerRef}  />
     </div>
   );
 }
