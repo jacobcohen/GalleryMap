@@ -12,7 +12,7 @@ export default function GalleryList() {
             
             <ul>
                 {data.map((item) => (
-                    <GalleryListItem id={item} />
+                    <GalleryListItem key={item} id={item} />
                 ))}
             </ul>
         </div>
