@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import GalleryListItem from './GalleryListItem.js';
 import '../Styles/GalleryList.css';
 

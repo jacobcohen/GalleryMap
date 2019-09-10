@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import '../Styles/App.css';
 import Map from './Map.js';
 import GalleryList from './GalleryList.js';
