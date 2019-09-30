@@ -1,37 +1,41 @@
 import { GetData } from "./Helpers.js";
-import cheerio from 'cheerio';
-import { savedNYArtBeat } from '../Helpers/SavedNYArtBeat.js'
-
-
-
 
 export default async function nyArtBeatScrape() {
 
-    //let html = await GetData('http://www.nyartbeat.com/list/event_opening');
-    let html = savedNYArtBeat;
-    const $ = cheerio.load(html);
-
+    let xml = await GetData('https://www.nyartbeat.com/list/event_opening.en.xml');
     let galleryList = [];
-    let nodes = $('#leftpart').find('.longsmartlist');
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xml, 'text/xml');
 
-    for (let i = 0; i < nodes.length; i++){
-        let dayInfo = $(nodes[i]).prev()[0];
-        galleryList.push(...await nyArtBeatDay($, dayInfo, $(nodes[i])));
+    let events = xmlDoc.getElementsByTagName("Event");
+    console.log(xmlDoc);
+
+    for (let i = 0; i < events.length; i++){
+        galleryList.push(nyArtBeatEventParse(events[i]));        
     }
-
-    console.log(galleryList);
 }
 
-async function nyArtBeatDay($, dayInfo, dailyGalleries){
-    let openingDate = new Date(dayInfo.attribs.id.split('_')[1]);
+function nyArtBeatEventParse(event){
+    let artistAndEventName = event.getElementsByTagName('Name')[0].textContent;
 
-    let dailyGalleriesResult = [];
+    let galleryName = event.getElementsByTagName('Name')[1].textContent;
 
-    let dailyGalleriesList = $(dailyGalleries[0]);
-    console.log(dailyGalleriesList);
-    
-    return dailyGalleriesResult;
+    let openingDate = new Date(event.getElementsByTagName('DateStart')[0].textContent);
 
+    let address = event.getElementsByTagName('Address')[0].textContent;
+
+    let description = event.getElementsByTagName('Description').textContent;
+ 
+    let image = event.getElementsByTagName('Image')[0].getAttribute('src').split('-')[0];
+
+    return {
+        Image: image,
+        ArtistAndEventName: artistAndEventName,
+        OpeningDate: openingDate,
+        GalleryName: galleryName,
+        Address: address,
+        Description: description
+    }
 }
 
-    //artist, eventName, galleryName, location, description, pictures, galleryLink
+//TODO: add gallery link
